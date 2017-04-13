@@ -17,9 +17,12 @@ function create() {
     
 //        game.stage.backgroundColor ='#4dc3ff';
     
-        game.add.tileSprite(0, 0, 1604,600, 'background');
+        // Create background and world bound.
+        game.add.tileSprite(0, 0, 1604, 600, 'background');
+        game.world.setBounds(0, 0, 1604, 600);
+
     
-        player = game.add.sprite(0, 0, 'guy');
+        player = game.add.sprite(0, 300, 'guy');
         var right = player.animations.add('right', [5,6,7,8,9], 12, true);
         
         var left = player.animations.add('left', [0,1,2,3,4], 12, true);
@@ -32,8 +35,8 @@ function create() {
     
         game.physics.enable(player, Phaser.Physics.ARCADE);
 
-        game.camera.follow(player);
-
+//        game.camera.follow(player);
+    
         player.body.collideWorldBounds = true;
 
         cursors = game.input.keyboard.createCursorKeys();
@@ -68,6 +71,30 @@ function update() {
     else
     {
         player.animations.stop();
+    }
+
+    // WASD to move camera. Can't move camera up and down right now because no space in tile Sprite.
+    var w = game.input.keyboard.addKey(Phaser.Keyboard.W);
+    var a = game.input.keyboard.addKey(Phaser.Keyboard.A);
+    var s = game.input.keyboard.addKey(Phaser.Keyboard.S);
+    var d = game.input.keyboard.addKey(Phaser.Keyboard.D);
+    
+    if (s.isDown)
+    {
+        game.camera.y -= 4;
+    }
+    else if (w.isDown)
+    {
+        game.camera.y += 4;
+    }
+
+    if (a.isDown)
+    {
+        game.camera.x -= 4;
+    }
+    else if (d.isDown)
+    {
+        game.camera.x += 4;
     }
 
 }

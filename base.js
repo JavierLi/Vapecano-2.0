@@ -8,14 +8,17 @@ var player;
 function preload() {
     
     game.load.spritesheet('guy', 'assets/zeldaspritesheet.png', guyWidth , guyHeight , guyNumFrames);
+    game.load.image('background', 'assets/backg.png')
   
 
 }
 
 function create() {
     
-        game.stage.backgroundColor ='#4dc3ff';
-
+//        game.stage.backgroundColor ='#4dc3ff';
+    
+        game.add.tileSprite(0, 0, 1604,600, 'background');
+    
         player = game.add.sprite(0, 0, 'guy');
         var right = player.animations.add('right', [5,6,7,8,9], 12, true);
         
@@ -30,6 +33,8 @@ function create() {
         game.physics.enable(player, Phaser.Physics.ARCADE);
 
         game.camera.follow(player);
+
+        player.body.collideWorldBounds = true;
 
         cursors = game.input.keyboard.createCursorKeys();
 }   

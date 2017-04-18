@@ -4,6 +4,7 @@ var guyWidth = 90;
 var guyHeight = 90;
 var guyNumFrames = 20;
 var player;
+var nextIdle = "leftIdle";
 
 function preload() {
     
@@ -24,11 +25,18 @@ function create() {
     
         player = game.add.sprite(0, 300, 'guy');
         var right = player.animations.add('right', [5,6,7,8,9], 12, true);
-        
+        var idleRight = player.animations.add('rightIdle', [9], 12, false);
+    
         var left = player.animations.add('left', [0,1,2,3,4], 12, true);
+        var idleLeft = player.animations.add('leftIdle', [0], 12, false);
     
         var up = player.animations.add('up', [10,11,12,13,14], 12, true);
+        var idleUp = player.animations.add('upIdle', [10], 12, false);
+    
         var down = player.animations.add('down', [15,16,17,18,19], 12, true);
+        var idleDown = player.animations.add('downIdle', [15], 12, false);
+        
+    
     
         left.enableUpdate = true;
         right.enableUpdate = true;
@@ -52,25 +60,29 @@ function update() {
     {
         player.body.velocity.x = -100;
         player.play('left');
+        nextIdle = "leftIdle"
     }
     else if (cursors.right.isDown)
     {
         player.body.velocity.x = 100;
         player.play('right');
+         nextIdle = "rightIdle"
     }
     else if (cursors.up.isDown)
     {
         player.body.velocity.y = -100;
         player.play('up');
+         nextIdle = "upIdle"
     }
     else if (cursors.down.isDown)
     {
         player.body.velocity.y = 100;
         player.play('down');
+         nextIdle = "downIdle"
     }
     else
     {
-        player.animations.stop();
+     player.play(nextIdle);
     }
 
     // WASD to move camera. Can't move camera up and down right now because no space in tile Sprite.

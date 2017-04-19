@@ -3,9 +3,17 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', { preload: preload, cr
 var guyWidth = 90;
 var guyHeight = 90;
 var guyNumFrames = 20;
-var player;
 var nextIdle = "leftIdle";
-var player2;
+
+player = function (game, x, y) {
+    
+    Phaser.Sprite.call(this, game, x, y, 'guy');
+
+};
+
+player.prototype = Object.create(Phaser.Sprite.prototype);
+
+player.prototype.constructor = player;
 
 function preload() {
     
@@ -24,7 +32,7 @@ function create() {
         game.world.setBounds(0, 0, 800, 600);
 
     
-        player = game.add.sprite(0, 300, 'guy');
+        /*player = game.add.sprite(0, 300, 'guy');
         player2 = game.add.sprite(300, 0, 'guy')
 
         var right = player.animations.add('right', [5,6,7,8,9], 12, true);
@@ -55,8 +63,17 @@ function create() {
 //        game.camera.follow(player);
     
         player.body.collideWorldBounds = true;
-        player2.body.collideWorldBounds = true;
+        player2.body.collideWorldBounds = true;*/
 
+        var character1 = new player(game, 200, 300);
+        character1.anchor.setTo(0.5,0.5);
+    
+        var character2 = new player(game, 600, 300);
+        character2.anchor.setTo(0.5, 0.5);
+
+        game.add.existing(character1);
+        game.add.existing(character2);
+    
         cursors = game.input.keyboard.createCursorKeys();
 }   
 
@@ -64,37 +81,37 @@ function create() {
 
 function update() {
     
-    game.physics.arcade.collide(player, player2)
+    /*game.physics.arcade.collide(character1, character2)
 
-    player.body.velocity.set(0);
+    character1.body.velocity.set(0);
 
     if (cursors.left.isDown)
     {
-        player.body.velocity.x = -100;
-        player.play('left');
+        character1.body.velocity.x = -100;
+        character1.play('left');
         nextIdle = "leftIdle"
     }
     else if (cursors.right.isDown)
     {
-        player.body.velocity.x = 100;
-        player.play('right');
+        character1.body.velocity.x = 100;
+        character1.play('right');
          nextIdle = "rightIdle"
     }
     else if (cursors.up.isDown)
     {
-        player.body.velocity.y = -100;
-        player.play('up');
+        character1.body.velocity.y = -100;
+        character1.play('up');
          nextIdle = "upIdle"
     }
     else if (cursors.down.isDown)
     {
-        player.body.velocity.y = 100;
-        player.play('down');
+        character1.body.velocity.y = 100;
+        character1.play('down');
          nextIdle = "downIdle"
     }
     else
     {
-     player.play(nextIdle);
+     character1.play(nextIdle);
     }
     
     
@@ -104,34 +121,34 @@ function update() {
     var s = game.input.keyboard.addKey(Phaser.Keyboard.S);
     var d = game.input.keyboard.addKey(Phaser.Keyboard.D);
     
-    player2.body.velocity.set(0);
+    character2.body.velocity.set(0);
 
     if (a.isDown)
     {
-        player2.body.velocity.x = -100;
-        player2.play('left2');
+        character2.body.velocity.x = -100;
+        character2.play('left2');
     }
     else if (d.isDown)
     {
-        player2.body.velocity.x = 100;
-        player2.play('right2');
+        character2.body.velocity.x = 100;
+        character2.play('right2');
     }
     else if (w.isDown)
     {
-        player2.body.velocity.y = -100;
-        player2.play('up2');
+        character2.body.velocity.y = -100;
+        character2.play('up2');
     }
     else if (s.isDown)
     {
-        player2.body.velocity.y = 100;
-        player2.play('down2');
+        character2.body.velocity.y = 100;
+        character2.play('down2');
     }
     else
     {
-        player2.animations.stop();
-    }
+        character2.animations.stop();
+    }*/
     
-}
+
     
 //    if (s.isDown)
 //    {
@@ -152,3 +169,4 @@ function update() {
 //    }
 //
 //}
+}

@@ -64,7 +64,7 @@ function create() {
 
 function update() {
     
-    game.physics.arcade.collide(player, player2, this);
+    game.physics.arcade.collide(player, player2)
 
     player.body.velocity.set(0);
 

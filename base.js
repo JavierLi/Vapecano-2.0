@@ -4,22 +4,48 @@ var guyWidth = 90;
 var guyHeight = 90;
 var guyNumFrames = 20;
 var nextIdle = "leftIdle";
+var character1;
+var character2;
 
-player = function (game, x, y) {
+    MyPlayer = function (game, x, y) {
+
+        Phaser.Sprite.call(this, game, x, y, 'guy');
+        
+        this.anchor.setTo(0.5, 0.5);
+        
+        game.add.existing(this);
+        
+        var right = this.animations.add('right', [5,6,7,8,9], 12, true);
+        var idleRight = this.animations.add('rightIdle', [9], 12, false);
     
-    Phaser.Sprite.call(this, game, x, y, 'guy');
-
-};
-
-player.prototype = Object.create(Phaser.Sprite.prototype);
-
-player.prototype.constructor = player;
-
-function preload() {
+        var left = this.animations.add('left', [0,1,2,3,4], 12, true);
+        var idleLeft = this.animations.add('leftIdle', [0], 12, false);
     
-    game.load.spritesheet('guy', 'assets/zeldaspritesheet.png', guyWidth , guyHeight , guyNumFrames);
-    game.load.image('background', 'assets/backg.png')
-  
+        var up = this.animations.add('up', [10,11,12,13,14], 12, true);
+        var idleUp = this.animations.add('upIdle', [10], 12, false);
+    
+        var down = this.animations.add('down', [15,16,17,18,19], 12, true);
+        var idleDown = this.animations.add('downIdle', [15], 12, false);
+    
+        left.enableUpdate = true;
+        right.enableUpdate = true;
+    
+        game.physics.enable(this, Phaser.Physics.ARCADE);
+    
+        this.body.collideWorldBounds = true;
+    };  
+
+   
+
+    MyPlayer.prototype = Object.create(Phaser.Sprite.prototype);
+
+    MyPlayer.prototype.constructor = MyPlayer;
+
+    function preload() {
+
+        game.load.spritesheet('guy', 'assets/zeldaspritesheet.png', guyWidth , guyHeight , guyNumFrames);
+        game.load.image('background', 'assets/backg.png')
+
 
 }
 
@@ -35,18 +61,7 @@ function create() {
         /*player = game.add.sprite(0, 300, 'guy');
         player2 = game.add.sprite(300, 0, 'guy')
 
-        var right = player.animations.add('right', [5,6,7,8,9], 12, true);
-        var idleRight = player.animations.add('rightIdle', [9], 12, false);
-    
-        var left = player.animations.add('left', [0,1,2,3,4], 12, true);
-        var idleLeft = player.animations.add('leftIdle', [0], 12, false);
-    
-        var up = player.animations.add('up', [10,11,12,13,14], 12, true);
-        var idleUp = player.animations.add('upIdle', [10], 12, false);
-    
-        var down = player.animations.add('down', [15,16,17,18,19], 12, true);
-        var idleDown = player.animations.add('downIdle', [15], 12, false);
-        
+
     
     
         var right2 = player2.animations.add('right2', [5,6,7,8,9], 12, true);
@@ -65,14 +80,11 @@ function create() {
         player.body.collideWorldBounds = true;
         player2.body.collideWorldBounds = true;*/
 
-        var character1 = new player(game, 200, 300);
-        character1.anchor.setTo(0.5,0.5);
+        character1 = new MyPlayer(game, 200, 300);
+        character2 = new MyPlayer(game, 600, 300);
+        
     
-        var character2 = new player(game, 600, 300);
-        character2.anchor.setTo(0.5, 0.5);
-
-        game.add.existing(character1);
-        game.add.existing(character2);
+        var character3 = new MyPlayer(game, 400, 300);
     
         cursors = game.input.keyboard.createCursorKeys();
 }   
@@ -81,10 +93,9 @@ function create() {
 
 function update() {
     
-    /*game.physics.arcade.collide(character1, character2)
-
+    game.physics.arcade.collide(character1)
     character1.body.velocity.set(0);
-
+    
     if (cursors.left.isDown)
     {
         character1.body.velocity.x = -100;
@@ -114,11 +125,15 @@ function update() {
      character1.play(nextIdle);
     }
     
+    game.physics.arcade.collide(character1, character2)
     
-    // WASD to move camera. Can't move camera up and down right now because no space in tile Sprite.
+    
     var w = game.input.keyboard.addKey(Phaser.Keyboard.W);
+
     var a = game.input.keyboard.addKey(Phaser.Keyboard.A);
+
     var s = game.input.keyboard.addKey(Phaser.Keyboard.S);
+
     var d = game.input.keyboard.addKey(Phaser.Keyboard.D);
     
     character2.body.velocity.set(0);
@@ -146,27 +161,7 @@ function update() {
     else
     {
         character2.animations.stop();
-    }*/
+    }
     
 
-    
-//    if (s.isDown)
-//    {
-//        game.camera.y -= 4;
-//    }
-//    else if (w.isDown)
-//    {
-//        game.camera.y += 4;
-//    }
-//
-//    if (a.isDown)
-//    {
-//        game.camera.x -= 4;
-//    }
-//    else if (d.isDown)
-//    {
-//        game.camera.x += 4;
-//    }
-//
-//}
 }

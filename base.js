@@ -141,22 +141,22 @@ function update() {
     if (a.isDown)
     {
         character2.body.velocity.x = -100;
-        character2.play('left2');
+        character2.play('left');
     }
     else if (d.isDown)
     {
         character2.body.velocity.x = 100;
-        character2.play('right2');
+        character2.play('right');
     }
     else if (w.isDown)
     {
         character2.body.velocity.y = -100;
-        character2.play('up2');
+        character2.play('up');
     }
     else if (s.isDown)
     {
         character2.body.velocity.y = 100;
-        character2.play('down2');
+        character2.play('down');
     }
     else
     {

@@ -3,7 +3,6 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', { preload: preload, cr
 var guyWidth = 90;
 var guyHeight = 90;
 var guyNumFrames = 20;
-var nextIdle = "leftIdle";
 var character1;
 var character2;
 
@@ -94,35 +93,51 @@ function create() {
 function update() {
     
     game.physics.arcade.collide(character1)
-    character1.body.velocity.set(0);
-    
+
     if (cursors.left.isDown)
     {
         character1.body.velocity.x = -100;
         character1.play('left');
-        nextIdle = "leftIdle"
+
     }
     else if (cursors.right.isDown)
     {
         character1.body.velocity.x = 100;
         character1.play('right');
-         nextIdle = "rightIdle"
+
     }
     else if (cursors.up.isDown)
     {
         character1.body.velocity.y = -100;
         character1.play('up');
-         nextIdle = "upIdle"
+   
     }
     else if (cursors.down.isDown)
     {
         character1.body.velocity.y = 100;
         character1.play('down');
-         nextIdle = "downIdle"
+   
     }
     else
-    {
-     character1.play(nextIdle);
+    { 
+        var nextIdle;
+        
+      if (character1.body.velocity.x < 0)
+            nextIdle = "leftIdle";
+        else if (character1.body.velocity.x > 0)
+            nextIdle = "rightIdle"
+        else if (character1.body.velocity.y < 0)
+            nextIdle = "upIdle"
+        else if(character1.body.velocity.y > 0)
+            nextIdle = "downIdle"
+        else 
+            nextIdle = null ;
+            
+        if (nextIdle != null)
+            character1.play(nextIdle);
+            
+        character1.body.velocity.set(0);
+        
     }
     
     game.physics.arcade.collide(character1, character2)
@@ -136,7 +151,6 @@ function update() {
 
     var d = game.input.keyboard.addKey(Phaser.Keyboard.D);
     
-    character2.body.velocity.set(0);
 
     if (a.isDown)
     {
@@ -160,7 +174,22 @@ function update() {
     }
     else
     {
-        character2.animations.stop();
+       if (character2.body.velocity.x < 0)
+            nextIdle = "leftIdle";
+        else if (character2.body.velocity.x > 0)
+            nextIdle = "rightIdle"
+        else if (character2.body.velocity.y < 0)
+            nextIdle = "upIdle"
+        else if(character2.body.velocity.y > 0)
+            nextIdle = "downIdle"
+        else 
+            nextIdle = null ;
+            
+        if (nextIdle != null)
+            character2.play(nextIdle);
+            
+        character2.body.velocity.set(0);
+        
     }
     
 

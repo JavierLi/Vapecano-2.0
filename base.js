@@ -32,6 +32,9 @@ var character2;
         game.physics.enable(this, Phaser.Physics.ARCADE);
     
         this.body.collideWorldBounds = true;
+        
+        this.body.setSize(38,10,16,19);
+        
     };  
 
    
@@ -55,30 +58,7 @@ function create() {
         // Create background and world bound.
         game.add.tileSprite(0, 0, 1604, 600, 'background');
         game.world.setBounds(0, 0, 800, 600);
-
-    
-        /*player = game.add.sprite(0, 300, 'guy');
-        player2 = game.add.sprite(300, 0, 'guy')
-
-
-    
-    
-        var right2 = player2.animations.add('right2', [5,6,7,8,9], 12, true);
-        var left2 = player2.animations.add('left2', [0,1,2,3,4], 12, true);
-        var up2 = player2.animations.add('up2', [10,11,12,13,14], 12, true);
-        var down2 = player2.animations.add('down2', [15,16,17,18,19], 12, true);
-    
-        left.enableUpdate = true;
-        right.enableUpdate = true;
-    
-        game.physics.enable(player, Phaser.Physics.ARCADE);
-        game.physics.enable(player2, Phaser.Physics.ARCADE);
-
-//        game.camera.follow(player);
-    
-        player.body.collideWorldBounds = true;
-        player2.body.collideWorldBounds = true;*/
-
+        
         character1 = new MyPlayer(game, 200, 300);
         character2 = new MyPlayer(game, 600, 300);
         

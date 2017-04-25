@@ -32,8 +32,8 @@ var character2;
         game.physics.enable(this, Phaser.Physics.ARCADE);
     
         this.body.collideWorldBounds = true;
-        
-        this.body.setSize(38,10,16,19);
+        //sets collision box
+        this.body.setSize(38,20,20,10);
         
     };  
 
@@ -59,11 +59,11 @@ function create() {
         game.add.tileSprite(0, 0, 1604, 600, 'background');
         game.world.setBounds(0, 0, 800, 600);
         
-        character1 = new MyPlayer(game, 200, 300);
-        character2 = new MyPlayer(game, 600, 300);
+        character2 = new MyPlayer(game, 200, 300);
+        character1 = new MyPlayer(game, 600, 300);
         
     
-        var character3 = new MyPlayer(game, 400, 300);
+
     
         cursors = game.input.keyboard.createCursorKeys();
 }   

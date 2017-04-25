@@ -53,10 +53,9 @@ var character2;
 
 function create() {
     
-//        game.stage.backgroundColor ='#4dc3ff';
+      game.stage.backgroundColor ='#4dc3ff';
     
         // Create background and world bound.
-        game.add.tileSprite(0, 0, 1604, 600, 'background');
         game.world.setBounds(0, 0, 800, 600);
         
         character2 = new MyPlayer(game, 200, 300);

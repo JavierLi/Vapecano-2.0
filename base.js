@@ -6,67 +6,58 @@ var guyNumFrames = 20;
 var character1;
 var character2;
 
-    function setupCharacter(game, x, y) {
-        
-        var character = game.add.sprite(x, y, 'guy');
-        
-        character.anchor.setTo(0.5, 0.5);
-        
-        game.add.existing(character);
-        
-        var right = character.animations.add('right', [5,6,7,8,9], 12, true);
-        var idleRight = character.animations.add('rightIdle', [9], 12, false);
-    
-        var left = character.animations.add('left', [0,1,2,3,4], 12, true);
-        var idleLeft = character.animations.add('leftIdle', [0], 12, false);
-    
-        var up = character.animations.add('up', [10,11,12,13,14], 12, true);
-        var idleUp = character.animations.add('upIdle', [10], 12, false);
-    
-        var down = character.animations.add('down', [15,16,17,18,19], 12, true);
-        var idleDown = character.animations.add('downIdle', [15], 12, false);
-    
-        left.enableUpdate = true;
-        right.enableUpdate = true;
-    
-        game.physics.enable(character, Phaser.Physics.ARCADE);
-    
-        character.body.collideWorldBounds = true;
-        //sets collision box
-        character.body.setSize(38,20,20,10);
-        
-        return character;
-        
-    };  
-  
-    function preload() {
+function setupCharacter(game, x, y) {
+    var character = game.add.sprite(x, y, 'guy');
 
-        game.load.spritesheet('guy', 'assets/zeldaspritesheet.png', guyWidth , guyHeight , guyNumFrames);
-        game.load.image('background', 'assets/backg.png')
+    character.anchor.setTo(0.5, 0.5);
 
+    game.add.existing(character);
 
+    var right = character.animations.add('right', [5,6,7,8,9], 12, true);
+    var idleRight = character.animations.add('rightIdle', [9], 12, false);
+
+    var left = character.animations.add('left', [0,1,2,3,4], 12, true);
+    var idleLeft = character.animations.add('leftIdle', [0], 12, false);
+
+    var up = character.animations.add('up', [10,11,12,13,14], 12, true);
+    var idleUp = character.animations.add('upIdle', [10], 12, false);
+
+    var down = character.animations.add('down', [15,16,17,18,19], 12, true);
+    var idleDown = character.animations.add('downIdle', [15], 12, false);
+
+    left.enableUpdate = true;
+    right.enableUpdate = true;
+
+    game.physics.enable(character, Phaser.Physics.ARCADE);
+
+    character.body.collideWorldBounds = true;
+    //sets collision box
+    character.body.setSize(38,20,20,10);
+
+    return character;
+
+};  
+
+function preload() {
+    game.load.spritesheet('guy', 'assets/zeldaspritesheet.png', guyWidth , guyHeight , guyNumFrames);
+    game.load.image('background', 'assets/backg.png')
 }
 
 function create() {
-    
-      game.stage.backgroundColor ='#4dc3ff';
-    
-        // Create background and world bound.
-        game.world.setBounds(0, 0, 800, 600);
-        
-        character2 = setupCharacter(game, 200, 300);
-        character1 = setupCharacter(game, 600, 300);
-        
-    
+    game.stage.backgroundColor ='#4dc3ff';
 
-    
-        cursors = game.input.keyboard.createCursorKeys();
+    // Create background and world bound.
+    game.world.setBounds(0, 0, 800, 600);
+
+    character2 = setupCharacter(game, 200, 300);
+    character1 = setupCharacter(game, 600, 300);
+
+    cursors = game.input.keyboard.createCursorKeys();
 }   
 
     
 
 function update() {
-    
     game.physics.arcade.collide(character1)
 
     if (cursors.left.isDown)
@@ -96,8 +87,8 @@ function update() {
     else
     { 
         var nextIdle;
-        
-      if (character1.body.velocity.x < 0)
+
+        if (character1.body.velocity.x < 0)
             nextIdle = "leftIdle";
         else if (character1.body.velocity.x > 0)
             nextIdle = "rightIdle"
@@ -106,11 +97,11 @@ function update() {
         else if(character1.body.velocity.y > 0)
             nextIdle = "downIdle"
         else 
-            nextIdle = null ;
-            
+            nextIdle = null;
+
         if (nextIdle != null)
             character1.play(nextIdle);
-            
+
         character1.body.velocity.set(0);
         
     }
@@ -119,11 +110,8 @@ function update() {
     
     
     var w = game.input.keyboard.addKey(Phaser.Keyboard.W);
-
     var a = game.input.keyboard.addKey(Phaser.Keyboard.A);
-
     var s = game.input.keyboard.addKey(Phaser.Keyboard.S);
-
     var d = game.input.keyboard.addKey(Phaser.Keyboard.D);
     
 
@@ -149,7 +137,7 @@ function update() {
     }
     else
     {
-       if (character2.body.velocity.x < 0)
+        if (character2.body.velocity.x < 0)
             nextIdle = "leftIdle";
         else if (character2.body.velocity.x > 0)
             nextIdle = "rightIdle"
@@ -158,14 +146,11 @@ function update() {
         else if(character2.body.velocity.y > 0)
             nextIdle = "downIdle"
         else 
-            nextIdle = null ;
-            
+            nextIdle = null;
+
         if (nextIdle != null)
             character2.play(nextIdle);
-            
-        character2.body.velocity.set(0);
-        
-    }
-    
 
+        character2.body.velocity.set(0);   
+    }
 }

@@ -7,6 +7,28 @@ var character1;
 var character2;
 var playerGroup;
 
+var bullets;
+var fireButton;
+var bulletTime = 0;
+var bullet;
+var directionX = -75;
+var directionY = 0;
+var angle = 180;
+
+
+var directionX2 = -75;
+var directionY2 = 0;
+var angle2 = 180;
+
+var fireButton2;
+var bulletTime2 = 0;
+
+var bullets2;
+var bullet2;
+
+var hitC1;
+var hitC2;
+
 function setupCharacter(game, x, y) {
     var character = game.add.sprite(x, y, 'guy');
 
@@ -33,7 +55,7 @@ function setupCharacter(game, x, y) {
 
     character.body.collideWorldBounds = true;
     //sets collision box
-    character.body.setSize(38,20,20,10);
+    character.body.setSize(38,62,20,10);
     
     playerGroup.add(character);
 
@@ -43,7 +65,9 @@ function setupCharacter(game, x, y) {
 
 function preload() {
     game.load.spritesheet('guy', 'assets/zeldaspritesheet.png', guyWidth , guyHeight , guyNumFrames);
-    game.load.image('background', 'assets/backg.png')
+    game.load.image('background', 'assets/backg.png');
+    game.load.image('bullet', 'assets/knife.png');
+
 }
 
 function create() {
@@ -56,6 +80,21 @@ function create() {
 
     character2 = setupCharacter(game, 200, 300);
     character1 = setupCharacter(game, 600, 300);
+    
+    bullets = game.add.physicsGroup();
+    bullets.createMultiple(5, 'bullet', false);
+    bullets.setAll('checkWorldBounds', true);
+    bullets.setAll('outOfBoundsKill', true);
+    
+    bullets2 = game.add.physicsGroup();
+    bullets2.createMultiple(5, 'bullet', false);
+    bullets2.setAll('checkWorldBounds', true);
+    bullets2.setAll('outOfBoundsKill', true);
+
+    character1.setanch
+    fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    fireButton2 = game.input.keyboard.addKey(Phaser.Keyboard.F);
+
 
     cursors = game.input.keyboard.createCursorKeys();
     
@@ -65,30 +104,55 @@ function create() {
     
 
 function update() {
-    game.physics.arcade.collide(character1)
+    game.physics.arcade.collide(character1);
+    
+    game.physics.arcade.overlap(bullet, character2, hitC2, null, this);
+    game.physics.arcade.overlap(bullet2, character1, hitC1, null, this); 
+
+    if (fireButton.isDown)
+    {
+        fireBullet();
+    }
+        
+    if (fireButton2.isDown)
+    {
+        fireBullet2();
+    }
 
     if (cursors.left.isDown)
     {
         character1.body.velocity.x = -100;
         character1.play('left');
+        directionX = -100;
+        directionY = 0;
+        angle = 180;
 
     }
     else if (cursors.right.isDown)
     {
         character1.body.velocity.x = 100;
         character1.play('right');
+        directionX = 100;
+        directionY = 0;
+        angle = 0;
 
     }
     else if (cursors.up.isDown)
     {
         character1.body.velocity.y = -100;
         character1.play('up');
+        directionX = 0;
+        directionY = -100;  
+        angle = 270;
    
     }
     else if (cursors.down.isDown)
     {
         character1.body.velocity.y = 100;
         character1.play('down');
+        directionX = 0;
+        directionY = 100;
+        angle = 90;
    
     }
     else
@@ -113,7 +177,7 @@ function update() {
         
     }
     
-    game.physics.arcade.collide(character1, character2)
+    game.physics.arcade.collide(character1, character2);
     
     
     var w = game.input.keyboard.addKey(Phaser.Keyboard.W);
@@ -126,21 +190,33 @@ function update() {
     {
         character2.body.velocity.x = -100;
         character2.play('left');
+        directionX2 = -100;
+        directionY2 = 0;
+        angle2 = 180;
     }
     else if (d.isDown)
     {
         character2.body.velocity.x = 100;
         character2.play('right');
+        directionX2 = 100;
+        directionY2 = 0;  
+        angle2 = 0;     
     }
     else if (w.isDown)
     {
         character2.body.velocity.y = -100;
         character2.play('up');
+        directionX2 = 0;
+        directionY2 = -100;  
+        angle2 = 270;
     }
     else if (s.isDown)
     {
         character2.body.velocity.y = 100;
         character2.play('down');
+        directionX2 = 0;
+        directionY2 = 100;
+        angle2 = 90;
     }
     else
     {
@@ -162,4 +238,52 @@ function update() {
     }
       //change depth by y position, player sprite with greater y will be on the topper layer
         playerGroup.sort('y', Phaser.Group.SORT_ASCENDING);
+}
+
+function fireBullet () {
+
+    if (game.time.time > bulletTime)
+    {
+        bullet = bullets.getFirstExists(false);
+
+        if (bullet)
+        {
+            bullet.reset(character1.x - 40, character1.y);
+            bullet.body.velocity.x = directionX;
+            bullet.body.velocity.y = directionY;
+            bullet.angle = angle;
+
+            bulletTime = game.time.time + 250;
+        }
+    }
+    
+}
+
+function fireBullet2 () {
+
+    if (game.time.time > bulletTime2)
+    {
+        bullet2 = bullets2.getFirstExists(false);
+
+        if (bullet2)
+        {
+            bullet2.reset(character2.x - 40, character2.y);
+            bullet2.body.velocity.x = directionX2;
+            bullet2.body.velocity.y = directionY2;
+            bullet2.angle = angle2;
+
+            bulletTime2 = game.time.time + 250;
+        }
+    }
+    
+}
+
+function hitC1 (bullet2, character1) {
+    character1.kill();
+    bullet2.kill();
+}
+
+function hitC2 (bullet, character2) {
+    character2.kill();
+    bullet.kill();
 }

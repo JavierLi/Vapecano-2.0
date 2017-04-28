@@ -6,43 +6,39 @@ var guyNumFrames = 20;
 var character1;
 var character2;
 
-    MyPlayer = function (game, x, y) {
-
-        Phaser.Sprite.call(this, game, x, y, 'guy');
+    function setupCharacter(game, x, y) {
         
-        this.anchor.setTo(0.5, 0.5);
+        var character = game.add.sprite(x, y, 'guy');
         
-        game.add.existing(this);
+        character.anchor.setTo(0.5, 0.5);
         
-        var right = this.animations.add('right', [5,6,7,8,9], 12, true);
-        var idleRight = this.animations.add('rightIdle', [9], 12, false);
+        game.add.existing(character);
+        
+        var right = character.animations.add('right', [5,6,7,8,9], 12, true);
+        var idleRight = character.animations.add('rightIdle', [9], 12, false);
     
-        var left = this.animations.add('left', [0,1,2,3,4], 12, true);
-        var idleLeft = this.animations.add('leftIdle', [0], 12, false);
+        var left = character.animations.add('left', [0,1,2,3,4], 12, true);
+        var idleLeft = character.animations.add('leftIdle', [0], 12, false);
     
-        var up = this.animations.add('up', [10,11,12,13,14], 12, true);
-        var idleUp = this.animations.add('upIdle', [10], 12, false);
+        var up = character.animations.add('up', [10,11,12,13,14], 12, true);
+        var idleUp = character.animations.add('upIdle', [10], 12, false);
     
-        var down = this.animations.add('down', [15,16,17,18,19], 12, true);
-        var idleDown = this.animations.add('downIdle', [15], 12, false);
+        var down = character.animations.add('down', [15,16,17,18,19], 12, true);
+        var idleDown = character.animations.add('downIdle', [15], 12, false);
     
         left.enableUpdate = true;
         right.enableUpdate = true;
     
-        game.physics.enable(this, Phaser.Physics.ARCADE);
+        game.physics.enable(character, Phaser.Physics.ARCADE);
     
-        this.body.collideWorldBounds = true;
+        character.body.collideWorldBounds = true;
         //sets collision box
-        this.body.setSize(38,20,20,10);
+        character.body.setSize(38,20,20,10);
+        
+        return character;
         
     };  
-
-   
-
-    MyPlayer.prototype = Object.create(Phaser.Sprite.prototype);
-
-    MyPlayer.prototype.constructor = MyPlayer;
-
+  
     function preload() {
 
         game.load.spritesheet('guy', 'assets/zeldaspritesheet.png', guyWidth , guyHeight , guyNumFrames);
@@ -58,8 +54,8 @@ function create() {
         // Create background and world bound.
         game.world.setBounds(0, 0, 800, 600);
         
-        character2 = new MyPlayer(game, 200, 300);
-        character1 = new MyPlayer(game, 600, 300);
+        character2 = setupCharacter(game, 200, 300);
+        character1 = setupCharacter(game, 600, 300);
         
     
 

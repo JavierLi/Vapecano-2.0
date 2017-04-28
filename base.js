@@ -5,6 +5,7 @@ var guyHeight = 90;
 var guyNumFrames = 20;
 var character1;
 var character2;
+var playerGroup;
 
 function setupCharacter(game, x, y) {
     var character = game.add.sprite(x, y, 'guy');
@@ -33,6 +34,8 @@ function setupCharacter(game, x, y) {
     character.body.collideWorldBounds = true;
     //sets collision box
     character.body.setSize(38,20,20,10);
+    
+    playerGroup.add(character);
 
     return character;
 
@@ -48,11 +51,15 @@ function create() {
 
     // Create background and world bound.
     game.world.setBounds(0, 0, 800, 600);
+    
+    playerGroup = this.game.add.group();
 
     character2 = setupCharacter(game, 200, 300);
     character1 = setupCharacter(game, 600, 300);
 
     cursors = game.input.keyboard.createCursorKeys();
+    
+    
 }   
 
     
@@ -153,4 +160,6 @@ function update() {
 
         character2.body.velocity.set(0);   
     }
+      //change depth by y position, player sprite with greater y will be on the topper layer
+        playerGroup.sort('y', Phaser.Group.SORT_ASCENDING);
 }

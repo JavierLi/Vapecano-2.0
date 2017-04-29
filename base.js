@@ -29,6 +29,11 @@ var bullet2;
 var hitC1;
 var hitC2;
 
+var hitbox1;
+var hitbox2;
+
+var bulletSpeed = 150;
+
 function setupCharacter(game, x, y) {
     var character = game.add.sprite(x, y, 'guy');
 
@@ -55,7 +60,7 @@ function setupCharacter(game, x, y) {
 
     character.body.collideWorldBounds = true;
     //sets collision box
-    character.body.setSize(38,62,20,10);
+    character.body.setSize(38,20,20,10);
     
     playerGroup.add(character);
 
@@ -67,6 +72,8 @@ function preload() {
     game.load.spritesheet('guy', 'assets/zeldaspritesheet.png', guyWidth , guyHeight , guyNumFrames);
     game.load.image('background', 'assets/backg.png');
     game.load.image('bullet', 'assets/knife.png');
+    game.load.image('hitbox1', 'assets/hitbox1.png');
+    game.load.image('hitbox2', 'assets/hitbox2.png');
 
 }
 
@@ -91,9 +98,18 @@ function create() {
     bullets2.setAll('checkWorldBounds', true);
     bullets2.setAll('outOfBoundsKill', true);
 
-    character1.setanch
+
+    hitbox1 = game.add.sprite(character1.x, character1.y, 'hitbox1'); 
+    hitbox2 = game.add.sprite(character2.x, character2.y, 'hitbox2'); 
+    hitbox1.anchor.setTo(0.5, 0.5);
+    hitbox2.anchor.setTo(0.5, 0.5);
+    game.physics.enable([hitbox1, hitbox2], Phaser.Physics.ARCADE);
+    
     fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     fireButton2 = game.input.keyboard.addKey(Phaser.Keyboard.F);
+    
+    hitbox1.alpha = 0;
+    hitbox2.alpha = 0;
 
 
     cursors = game.input.keyboard.createCursorKeys();
@@ -106,8 +122,13 @@ function create() {
 function update() {
     game.physics.arcade.collide(character1);
     
-    game.physics.arcade.overlap(bullet, character2, hitC2, null, this);
-    game.physics.arcade.overlap(bullet2, character1, hitC1, null, this); 
+    game.physics.arcade.overlap(bullet, hitbox2, hitC2, null, this);
+    game.physics.arcade.overlap(bullet2, hitbox1, hitC1, null, this); 
+    hitbox1.body.position.y = character1.y - 31;
+    hitbox2.body.position.y = character2.y - 31;
+    hitbox1.body.position.x = character1.x - 19;
+    hitbox2.body.position.x = character2.x - 19;
+
 
     if (fireButton.isDown)
     {
@@ -123,18 +144,18 @@ function update() {
     {
         character1.body.velocity.x = -100;
         character1.play('left');
-        directionX = -100;
+        directionX = -bulletSpeed;
         directionY = 0;
-        angle = 180;
-
+        angle = 180;       
     }
     else if (cursors.right.isDown)
     {
         character1.body.velocity.x = 100;
         character1.play('right');
-        directionX = 100;
+        directionX = bulletSpeed;
         directionY = 0;
         angle = 0;
+
 
     }
     else if (cursors.up.isDown)
@@ -142,7 +163,7 @@ function update() {
         character1.body.velocity.y = -100;
         character1.play('up');
         directionX = 0;
-        directionY = -100;  
+        directionY = -bulletSpeed;  
         angle = 270;
    
     }
@@ -151,7 +172,7 @@ function update() {
         character1.body.velocity.y = 100;
         character1.play('down');
         directionX = 0;
-        directionY = 100;
+        directionY = bulletSpeed;
         angle = 90;
    
     }
@@ -174,6 +195,8 @@ function update() {
             character1.play(nextIdle);
 
         character1.body.velocity.set(0);
+
+        
         
     }
     
@@ -198,7 +221,7 @@ function update() {
     {
         character2.body.velocity.x = 100;
         character2.play('right');
-        directionX2 = 100;
+        directionX2 = bulletSpeed;
         directionY2 = 0;  
         angle2 = 0;     
     }
@@ -207,7 +230,7 @@ function update() {
         character2.body.velocity.y = -100;
         character2.play('up');
         directionX2 = 0;
-        directionY2 = -100;  
+        directionY2 = -bulletSpeed;  
         angle2 = 270;
     }
     else if (s.isDown)
@@ -215,7 +238,7 @@ function update() {
         character2.body.velocity.y = 100;
         character2.play('down');
         directionX2 = 0;
-        directionY2 = 100;
+        directionY2 = bulletSpeed;
         angle2 = 90;
     }
     else
@@ -278,12 +301,14 @@ function fireBullet2 () {
     
 }
 
-function hitC1 (bullet2, character1) {
+function hitC1 (bullet2, hitbox1) {
     character1.kill();
+    hitbox1.kill();
     bullet2.kill();
 }
 
-function hitC2 (bullet, character2) {
+function hitC2 (bullet, hitbox2) {
     character2.kill();
+    hitbox2.kill();
     bullet.kill();
 }

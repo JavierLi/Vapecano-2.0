@@ -12,7 +12,7 @@ var bullets;
 var fireButton;
 var bulletTime = 0;
 var bullet;
-var directionX = -75;
+var directionX = -150;
 var directionY = 0;
 var angle = 180;
 =======
@@ -25,7 +25,7 @@ var map
 >>>>>>> Stashed changes
 
 
-var directionX2 = -75;
+var directionX2 = -150;
 var directionY2 = 0;
 var angle2 = 180;
 
@@ -42,6 +42,12 @@ var hitbox1;
 var hitbox2;
 
 var bulletSpeed = 150;
+
+var bulletX1 = -30;
+var bulletY1 = 0;
+
+var bulletX2 = -30;
+var bulletY2 = 0;
 
 function setupCharacter(game, x, y) {
     var character = game.add.sprite(x, y, 'guy');
@@ -157,15 +163,6 @@ function create() {
     
 
 function update() {
-    game.physics.arcade.collide(character1);
-    
-    game.physics.arcade.overlap(bullet, hitbox2, hitC2, null, this);
-    game.physics.arcade.overlap(bullet2, hitbox1, hitC1, null, this); 
-    hitbox1.body.position.y = character1.y - 31;
-    hitbox2.body.position.y = character2.y - 31;
-    hitbox1.body.position.x = character1.x - 19;
-    hitbox2.body.position.x = character2.x - 19;
-
 
     if (fireButton.isDown)
     {
@@ -183,7 +180,9 @@ function update() {
         character1.play('left');
         directionX = -bulletSpeed;
         directionY = 0;
-        angle = 180;       
+        angle = 180;
+        bulletX1 = -30;
+        bulletY1 = 0;
     }
     else if (cursors.right.isDown)
     {
@@ -192,8 +191,8 @@ function update() {
         directionX = bulletSpeed;
         directionY = 0;
         angle = 0;
-
-
+        bulletX1 = 30;
+        bulletY1 = 0;
     }
     else if (cursors.up.isDown)
     {
@@ -202,7 +201,8 @@ function update() {
         directionX = 0;
         directionY = -bulletSpeed;  
         angle = 270;
-   
+        bulletX1 = 0;
+        bulletY1 = -40;   
     }
     else if (cursors.down.isDown)
     {
@@ -211,6 +211,8 @@ function update() {
         directionX = 0;
         directionY = bulletSpeed;
         angle = 90;
+        bulletX1 = 0;
+        bulletY1 = 40;
    
     }
     else
@@ -253,6 +255,8 @@ function update() {
         directionX2 = -100;
         directionY2 = 0;
         angle2 = 180;
+        bulletX2 = -30;
+        bulletY2 = 0;
     }
     else if (d.isDown)
     {
@@ -260,7 +264,9 @@ function update() {
         character2.play('right');
         directionX2 = bulletSpeed;
         directionY2 = 0;  
-        angle2 = 0;     
+        angle2 = 0;   
+        bulletX2 = 30;
+        bulletY2 = 0;
     }
     else if (w.isDown)
     {
@@ -269,6 +275,8 @@ function update() {
         directionX2 = 0;
         directionY2 = -bulletSpeed;  
         angle2 = 270;
+        bulletX2 = 0;
+        bulletY2 = -40;
     }
     else if (s.isDown)
     {
@@ -277,6 +285,8 @@ function update() {
         directionX2 = 0;
         directionY2 = bulletSpeed;
         angle2 = 90;
+        bulletX2 = 0;
+        bulletY2 = 40; 
     }
     else
     {
@@ -298,6 +308,12 @@ function update() {
     }
       //change depth by y position, player sprite with greater y will be on the topper layer
         playerGroup.sort('y', Phaser.Group.SORT_ASCENDING);
+    game.physics.arcade.overlap(bullet, hitbox2, hitC2, null, this);
+    game.physics.arcade.overlap(bullet2, hitbox1, hitC1, null, this); 
+    hitbox1.body.position.y = character1.y - 31;
+    hitbox2.body.position.y = character2.y - 31;
+    hitbox1.body.position.x = character1.x - 19;
+    hitbox2.body.position.x = character2.x - 19;
 }
 
 function fireBullet () {
@@ -308,10 +324,11 @@ function fireBullet () {
 
         if (bullet)
         {
-            bullet.reset(character1.x - 40, character1.y);
+            bullet.reset(character1.x + bulletX1, character1.y + bulletY1);
             bullet.body.velocity.x = directionX;
             bullet.body.velocity.y = directionY;
             bullet.angle = angle;
+            bullet.anchor.setTo(0.5, 0.5);
 
             bulletTime = game.time.time + 250;
         }
@@ -327,10 +344,11 @@ function fireBullet2 () {
 
         if (bullet2)
         {
-            bullet2.reset(character2.x - 40, character2.y);
+            bullet2.reset(character2.x + bulletX2, character2.y + bulletY2);
             bullet2.body.velocity.x = directionX2;
             bullet2.body.velocity.y = directionY2;
             bullet2.angle = angle2;
+            bullet2.anchor.setTo(0.5, 0.5);
 
             bulletTime2 = game.time.time + 250;
         }

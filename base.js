@@ -161,13 +161,14 @@ function create() {
 function update() {
 
     if(health2.length > 0 && health1.length > 0)
-        {
+    {
             
     if (fireButton.isDown)
     {
         fireBullet();
     }           
-            
+
+	var nextIdle;
     if (cursors.left.isDown)
     {
         character1.body.velocity.x = -100;
@@ -188,10 +189,20 @@ function update() {
         bulletX1 = 30;
         bulletY1 = 0;
     }
-    else if (cursors.up.isDown)
+	else
+	{
+        if (character1.body.velocity.x < 0)
+            nextIdle = "leftIdle";
+        else if (character1.body.velocity.x > 0)
+            nextIdle = "rightIdle";
+		character1.body.velocity.x = 0;
+		character1.play(nextIdle);
+	}
+    if (cursors.up.isDown)
     {
         character1.body.velocity.y = -100;
-        character1.play('up');
+		if (character1.body.velocity.x == 0)
+        	character1.play('up');
         directionX = 0;
         directionY = -bulletSpeed;  
         angle = 270;
@@ -201,37 +212,24 @@ function update() {
     else if (cursors.down.isDown)
     {
         character1.body.velocity.y = 100;
-        character1.play('down');
+		if (character1.body.velocity.x == 0)
+        	character1.play('down');
         directionX = 0;
         directionY = bulletSpeed;
         angle = 90;
         bulletX1 = 0;
         bulletY1 = 40;
-   
     }
-    else
-    { 
-        var nextIdle;
-
-        if (character1.body.velocity.x < 0)
-            nextIdle = "leftIdle";
-        else if (character1.body.velocity.x > 0)
-            nextIdle = "rightIdle"
-        else if (character1.body.velocity.y < 0)
-            nextIdle = "upIdle"
-        else if(character1.body.velocity.y > 0)
-            nextIdle = "downIdle"
-        else 
-            nextIdle = null;
-
-        if (nextIdle != null)
-            character1.play(nextIdle);
-
-        character1.body.velocity.set(0);
-    }
-        
-        
-    }
+	else
+	{
+		character1.body.velocity.y = 0;
+		if (character1.animations.currentAnim.name == 'up')
+			character1.play('upIdle');
+		else if (character1.animations.currentAnim.name == 'down')
+			character1.play('downIdle');
+	}
+		
+   }
     
     game.physics.arcade.collide(character1, character2);
     
@@ -243,12 +241,15 @@ function update() {
     
     if(health2.length > 0 && health1.length > 0)
         {
-            
-    if (fireButton2.isDown)
+       
+			
+			
+		if (fireButton2.isDown)
     {
         fireBullet2();
-    }
+    }           
 
+	var nextIdle;
     if (a.isDown)
     {
         character2.body.velocity.x = -100;
@@ -264,50 +265,50 @@ function update() {
         character2.body.velocity.x = 100;
         character2.play('right');
         directionX2 = bulletSpeed;
-        directionY2 = 0;  
-        angle2 = 0;   
+        directionY2 = 0;
+        angle2 = 0;
         bulletX2 = 30;
         bulletY2 = 0;
     }
-    else if (w.isDown)
+	else
+	{
+        if (character2.body.velocity.x < 0)
+            nextIdle = "leftIdle";
+        else if (character2.body.velocity.x > 0)
+            nextIdle = "rightIdle";
+		character2.body.velocity.x = 0;
+		character2.play(nextIdle);
+	}
+    if (w.isDown)
     {
         character2.body.velocity.y = -100;
-        character2.play('up');
+		if (character2.body.velocity.x == 0)
+        	character2.play('up');
         directionX2 = 0;
         directionY2 = -bulletSpeed;  
         angle2 = 270;
         bulletX2 = 0;
-        bulletY2 = -40;
+        bulletY2 = -40;   
     }
     else if (s.isDown)
     {
         character2.body.velocity.y = 100;
-        character2.play('down');
+		if (character2.body.velocity.x == 0)
+        	character2.play('down');
         directionX2 = 0;
         directionY2 = bulletSpeed;
         angle2 = 90;
         bulletX2 = 0;
-        bulletY2 = 40; 
+        bulletY2 = 40;
     }
-    else
-    {
-        if (character2.body.velocity.x < 0)
-            nextIdle = "leftIdle";
-        else if (character2.body.velocity.x > 0)
-            nextIdle = "rightIdle"
-        else if (character2.body.velocity.y < 0)
-            nextIdle = "upIdle"
-        else if(character2.body.velocity.y > 0)
-            nextIdle = "downIdle"
-        else 
-            nextIdle = null;
-
-        if (nextIdle != null)
-            character2.play(nextIdle);
-
-        character2.body.velocity.set(0);   
-    }
-            
+	else
+	{
+		character2.body.velocity.y = 0;
+		if (character2.animations.currentAnim.name == 'up')
+			character2.play('upIdle');
+		else if (character2.animations.currentAnim.name == 'down')
+			character2.play('downIdle');
+	}     
         }
             
     game.physics.arcade.overlap(bullets, hitbox2, hitC2, null, this);

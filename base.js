@@ -32,7 +32,7 @@ var hitC2;
 var hitbox1;
 var hitbox2;
 
-var bulletSpeed = 150;
+var bulletSpeed = 300;
 
 var bulletX1 = -30;
 var bulletY1 = 0;
@@ -41,6 +41,13 @@ var bulletX2 = -30;
 var bulletY2 = 0;
 
 var map;
+var blood;
+
+// HEALTH STUFF WIP
+var health1 = [];
+var health2 = [];
+var maxHealth = 3;
+
 
 function setupCharacter(game, x, y) {
     var character = game.add.sprite(x, y, 'guy');
@@ -83,6 +90,9 @@ function preload() {
     game.load.image('hitbox1', 'assets/hitbox1.png');
     game.load.image('hitbox2', 'assets/hitbox2.png');
     game.load.image('map', 'assets/map.jpg');
+    game.load.spritesheet('blood', 'assets/blood.png', 512, 512, 7);
+    game.load.image('health','heart.png');
+
 
 }
 
@@ -127,6 +137,20 @@ function create() {
 
     cursors = game.input.keyboard.createCursorKeys();
     
+    // HEALTH STUFF WIP
+    
+    health1 = [];
+    for(var h = 0; h < maxHealth; h++)
+    {
+        var health = game.add.sprite(20 + (h * 30),20,'health');
+        health1.push(health);
+    }
+    health2 = [];
+    for(var k = 0; k < maxHealth; k++)
+    {
+        var health = game.add.sprite(480 + (k * 30),20,'health');
+        health2.push(health);
+    }
     
 }   
 
@@ -134,16 +158,14 @@ function create() {
 
 function update() {
 
+    if(health2.length > 0 && health1.length > 0)
+        {
+            
     if (fireButton.isDown)
     {
         fireBullet();
-    }
-        
-    if (fireButton2.isDown)
-    {
-        fireBullet2();
-    }
-
+    }           
+            
     if (cursors.left.isDown)
     {
         character1.body.velocity.x = -100;
@@ -204,7 +226,7 @@ function update() {
             character1.play(nextIdle);
 
         character1.body.velocity.set(0);
-
+    }
         
         
     }
@@ -217,12 +239,19 @@ function update() {
     var s = game.input.keyboard.addKey(Phaser.Keyboard.S);
     var d = game.input.keyboard.addKey(Phaser.Keyboard.D);
     
+    if(health2.length > 0 && health1.length > 0)
+        {
+            
+    if (fireButton2.isDown)
+    {
+        fireBullet2();
+    }
 
     if (a.isDown)
     {
         character2.body.velocity.x = -100;
         character2.play('left');
-        directionX2 = -100;
+        directionX2 = -bulletSpeed;
         directionY2 = 0;
         angle2 = 180;
         bulletX2 = -30;
@@ -276,6 +305,9 @@ function update() {
 
         character2.body.velocity.set(0);   
     }
+            
+        }
+            
     game.physics.arcade.overlap(bullets, hitbox2, hitC2, null, this);
     game.physics.arcade.overlap(bullets2, hitbox1, hitC1, null, this);     hitbox1.body.position.y = character1.y - 31;
     hitbox2.body.position.y = character2.y - 31;
@@ -329,14 +361,50 @@ function fireBullet2 () {
     
 }
 
-function hitC1 (bullet2, hitbox1) {
-    character1.kill();
-    hitbox1.kill();
+function hitC1 (hitbox1, bullet2) {
+
     bullet2.kill();
+    
+    var health = health1.pop();
+        
+        if(health)
+            {
+            health.kill();
+            }
+        if(health1.length == 0)
+            {
+                var sprite = game.add.sprite(character1.position.x, character1.position.y, 'blood');
+                sprite.anchor.setTo(0.5, 0.5);
+
+                sprite.scale.setTo(0.5, 0.5);
+                sprite.animations.add('splatter');
+
+                sprite.animations.play('splatter', 10, false);
+                hitbox1.kill();
+                character1.kill();
+//                tankWins.visible = true;
+            }
 }
 
-function hitC2 (bullet, hitbox2) {
-    character2.kill();
-    hitbox2.kill();
+function hitC2 (hitbox2, bullet) {
+
     bullet.kill();
+    
+    var health = health2.pop();
+        if(health)
+            {
+            health.kill();
+            };
+        if(health2.length == 0)
+            {
+                var sprite = game.add.sprite(character2.position.x, character2.position.y, 'blood');
+                sprite.anchor.setTo(0.5, 0.5);
+
+                sprite.scale.setTo(0.5, 0.5);
+                sprite.animations.add('splatter');
+
+                sprite.animations.play('splatter', 10, false);
+                hitbox2.kill();
+                character2.kill(); 
+            }
 }

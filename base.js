@@ -40,6 +40,8 @@ var bulletY1 = 0;
 var bulletX2 = -30;
 var bulletY2 = 0;
 
+var map;
+
 function setupCharacter(game, x, y) {
     var character = game.add.sprite(x, y, 'guy');
 
@@ -80,11 +82,16 @@ function preload() {
     game.load.image('bullet', 'assets/knife.png');
     game.load.image('hitbox1', 'assets/hitbox1.png');
     game.load.image('hitbox2', 'assets/hitbox2.png');
+    game.load.image('map', 'assets/map.jpg');
 
 }
 
 function create() {
-    game.stage.backgroundColor ='#4dc3ff';
+//    game.stage.backgroundColor ='#4dc3ff';
+    
+    map = game.add.sprite(0, 0, 'map');
+    map.scale.set(1.5);
+
 
     // Create background and world bound.
     game.world.setBounds(0, 0, 800, 600);
@@ -269,14 +276,17 @@ function update() {
 
         character2.body.velocity.set(0);   
     }
-      //change depth by y position, player sprite with greater y will be on the topper layer
-        playerGroup.sort('y', Phaser.Group.SORT_ASCENDING);
-    game.physics.arcade.overlap(bullet, hitbox2, hitC2, null, this);
-    game.physics.arcade.overlap(bullet2, hitbox1, hitC1, null, this); 
-    hitbox1.body.position.y = character1.y - 31;
+    game.physics.arcade.overlap(bullets, hitbox2, hitC2, null, this);
+    game.physics.arcade.overlap(bullets2, hitbox1, hitC1, null, this);     hitbox1.body.position.y = character1.y - 31;
     hitbox2.body.position.y = character2.y - 31;
     hitbox1.body.position.x = character1.x - 19;
     hitbox2.body.position.x = character2.x - 19;
+    
+    
+    //change depth by y position, player sprite with greater y will be on the topper layer
+    playerGroup.sort('y', Phaser.Group.SORT_ASCENDING);
+
+
 }
 
 function fireBullet () {

@@ -48,6 +48,8 @@ var health1 = [];
 var health2 = [];
 var maxHealth = 3;
 
+var isGameOver = false;
+
 
 function setupCharacter(game, x, y) {
     var character = game.add.sprite(x, y, 'guy');
@@ -323,7 +325,7 @@ function update() {
 
 function fireBullet () {
 
-    if (game.time.time > bulletTime)
+    if (!isGameOver && game.time.time > bulletTime)
     {
         bullet = bullets.getFirstExists(false);
 
@@ -343,7 +345,7 @@ function fireBullet () {
 
 function fireBullet2 () {
 
-    if (game.time.time > bulletTime2)
+    if (!isGameOver && game.time.time > bulletTime2)
     {
         bullet2 = bullets2.getFirstExists(false);
 
@@ -371,7 +373,7 @@ function hitC1 (hitbox1, bullet2) {
             {
             health.kill();
             }
-        if(health1.length == 0)
+        if(health1.length === 0)
             {
                 var sprite = game.add.sprite(character1.position.x, character1.position.y, 'blood');
                 sprite.anchor.setTo(0.5, 0.5);
@@ -382,6 +384,7 @@ function hitC1 (hitbox1, bullet2) {
                 sprite.animations.play('splatter', 10, false);
                 hitbox1.kill();
                 character1.kill();
+                c2wins();
 //                tankWins.visible = true;
             }
 }
@@ -395,7 +398,7 @@ function hitC2 (hitbox2, bullet) {
             {
             health.kill();
             };
-        if(health2.length == 0)
+        if(health2.length === 0)
             {
                 var sprite = game.add.sprite(character2.position.x, character2.position.y, 'blood');
                 sprite.anchor.setTo(0.5, 0.5);
@@ -405,6 +408,72 @@ function hitC2 (hitbox2, bullet) {
 
                 sprite.animations.play('splatter', 10, false);
                 hitbox2.kill();
-                character2.kill(); 
+                character2.kill();
+                c1wins();
             }
+}
+
+function c2wins(){
+        c2text = game.add.text((game.width/2), 50, "-Player 2 Wins-", {
+        font: "40px Arial",
+        fill: "#000000",
+        outline: "#ffffff",
+        align: "center"
+
+    });
+    c2text.anchor.setTo(0.5, 0.5);
+    c2text.stroke = '#000000';
+    c2text.strokeThickness = 8;
+    c2text.fill = '#43d637';
+    isGameOver = true;
+
+      tryagaintext = game.add.text((game.width / 2), 400, "Click to try again", {
+        font: "40px Arial",
+        fill: "#000000",
+        align: "center"
+    });
+        tryagaintext.anchor.setTo(0.5, 0.5);
+        tryagaintext.inputEnabled = true;
+        tryagaintext.stroke = '#000000';
+        tryagaintext.strokeThickness = 8;
+        tryagaintext.fill = '#43d637';
+
+     tryagaintext.events.onInputUp.add(function() {
+         reset();
+     });
+
+}
+
+function c1wins(){
+        c1text = game.add.text((game.width/2), 50, "-Player 1 Wins-", {
+        font: "40px Arial",
+        fill: "#000000",
+        outline: "#ffffff",
+        align: "center"
+    });
+    c1text.anchor.setTo(0.5, 0.5);
+    c1text.stroke = '#000000';
+    c1text.strokeThickness = 8;
+    c1text.fill = '#43d637';
+    isGameOver = true;
+
+      tryagaintext = game.add.text((game.width / 2), 400, "Click to try again", {
+        font: "40px Arial",
+        fill: "#000000",
+        align: "center"
+    });
+        tryagaintext.anchor.setTo(0.5, 0.5);
+        tryagaintext.inputEnabled = true;
+        tryagaintext.stroke = '#000000';
+        tryagaintext.strokeThickness = 8;
+        tryagaintext.fill = '#43d637';
+     tryagaintext.events.onInputUp.add(function() {
+         reset();
+     });
+}
+
+function reset(){
+    isGameOver = false;
+    game.state.restart();
+
 }

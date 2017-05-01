@@ -5,7 +5,6 @@ var guyHeight = 90;
 var guyNumFrames = 20;
 var character1;
 var character2;
-<<<<<<< Updated upstream
 var playerGroup;
 
 var bullets;
@@ -15,14 +14,6 @@ var bullet;
 var directionX = -75;
 var directionY = 0;
 var angle = 180;
-=======
-var background
-var wall
-var Obsticles
-var Collide
-var map
-    MyPlayer = function (game, x, y) {
->>>>>>> Stashed changes
 
 
 var directionX2 = -75;
@@ -59,7 +50,6 @@ function setupCharacter(game, x, y) {
     var up = character.animations.add('up', [10,11,12,13,14], 12, true);
     var idleUp = character.animations.add('upIdle', [10], 12, false);
 
-<<<<<<< Updated upstream
     var down = character.animations.add('down', [15,16,17,18,19], 12, true);
     var idleDown = character.animations.add('downIdle', [15], 12, false);
 
@@ -84,11 +74,6 @@ function preload() {
     game.load.image('bullet', 'assets/knife.png');
     game.load.image('hitbox1', 'assets/hitbox1.png');
     game.load.image('hitbox2', 'assets/hitbox2.png');
-=======
-        game.load.spritesheet('guy', 'assets/zeldaspritesheet.png', guyWidth , guyHeight , guyNumFrames);
-        game.load.tilemap('map', 'assets/FIGHT.json', null, Phaser.Tilemap.TILED_JSON);
-        game.load.image('tiles', 'assets/desert.png');
->>>>>>> Stashed changes
 
 }
 
@@ -103,7 +88,6 @@ function create() {
     character2 = setupCharacter(game, 200, 300);
     character1 = setupCharacter(game, 600, 300);
     
-<<<<<<< Updated upstream
     bullets = game.add.physicsGroup();
     bullets.createMultiple(5, 'bullet', false);
     bullets.setAll('checkWorldBounds', true);
@@ -130,27 +114,6 @@ function create() {
 
     cursors = game.input.keyboard.createCursorKeys();
     
-=======
-        // Create background and world bound.
-        game.world.setBounds(0, 0, 800, 600);
-        
-       
-        map = game.add.tilemap('map');
-    map.addTilesetImage('desert', 'tiles');
-   background = map.createLayer('Background');
-     wall = map.createLayer('wall');
-    Obsticles = map.createLayer('Obsticles');
-    Collide = map.createLayer('Collide');
-    background.resizeWorld();
-    wall.resizeWorld();
-    Obsticles.resizeWorld();
-    map.setCollisionBetween(144, 144, true, 'Collide');
-    Collide.resizeWorld();
-    Collide.visible= false
-    
- character2 = new MyPlayer(game, 200, 300);
-        character1 = new MyPlayer(game, 600, 300);
->>>>>>> Stashed changes
     
 }   
 

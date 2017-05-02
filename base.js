@@ -55,6 +55,9 @@ var maxHealth = 3;
 
 var isGameOver = false;
 
+var wall1;
+var wall2;
+
 
 function setupCharacter(game, x, y) {
     var character = game.add.sprite(x, y, 'guy');
@@ -143,6 +146,10 @@ function create() {
     
     hitbox1.alpha = 0;
     hitbox2.alpha = 0;
+
+    wall1 = game.add.sprite(225, 262.5, 'hitbox1'); 
+    wall2 = game.add.sprite(493.5, 264, 'hitbox2'); 
+
 
 
     cursors = game.input.keyboard.createCursorKeys();

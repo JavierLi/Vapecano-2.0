@@ -58,6 +58,7 @@ var hitsound;
 var wall1;
 var wall2;
 
+
 function setupCharacter(game, x, y) {
     var character = game.add.sprite(x, y, 'guy');
 
@@ -156,6 +157,10 @@ function create() {
     game.physics.enable([wall1,wall2], Phaser.Physics.ARCADE);
     wall1.body.setSize(175, 200);
     wall1.body.immovable = true;
+
+    wall1 = game.add.sprite(225, 262.5, 'hitbox1'); 
+    wall2 = game.add.sprite(493.5, 264, 'hitbox2'); 
+
 
 
     cursors = game.input.keyboard.createCursorKeys();

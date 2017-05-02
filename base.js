@@ -1,4 +1,4 @@
-var game = new Phaser.Game(900, 756, Phaser.AUTO, 'game', { preload: preload, create: create, update: update });
+var game = new Phaser.Game(900, 756, Phaser.AUTO, 'game', { preload: preload, create: create, update: update, render: render });
 
 var guyWidth = 90;
 var guyHeight = 90;
@@ -15,10 +15,6 @@ var directionX = -150;
 var directionY = 0;
 var angle = 180;
 
-var Collide;
-var wall;
-var Background;
-var Obsticles;
 var map;
 
 var directionX2 = -150;
@@ -55,6 +51,12 @@ var maxHealth = 3;
 
 var isGameOver = false;
 
+var fire;
+
+var hitsound; 
+
+var wall1;
+var wall2;
 
 function setupCharacter(game, x, y) {
     var character = game.add.sprite(x, y, 'guy');
@@ -93,7 +95,8 @@ function setupCharacter(game, x, y) {
 function preload() {
     game.load.spritesheet('guy', 'assets/zeldaspritesheet.png', guyWidth , guyHeight , guyNumFrames);
     game.load.image('background', 'assets/backg.png');
-    game.load.image('bullet', 'assets/knife.png');
+//    game.load.image('bullet', 'assets/knife.png');
+    game.load.spritesheet('bullet', 'assets/arrow.png', 88.5, 41, 4)
     game.load.image('hitbox1', 'assets/hitbox1.png');
     game.load.image('hitbox2', 'assets/hitbox2.png');
     game.load.image('map', 'assets/FIGHT.png');
@@ -103,6 +106,8 @@ function preload() {
     
     game.load.spritesheet('blood', 'assets/blood.png', 512, 512, 7);
     game.load.image('health','heart.png');
+    
+    game.load.audio('roblox', 'assets/roblox.mp3');
 
 
 }
@@ -143,10 +148,19 @@ function create() {
     
     hitbox1.alpha = 0;
     hitbox2.alpha = 0;
+    
+
+    // NEED LAKE WIP ELEVATION 
+    wall1 = game.add.sprite(228, 220, 'hitbox1');
+    wall2 = game.add.sprite(498, 265.5, 'hitbox2');
+    game.physics.enable([wall1,wall2], Phaser.Physics.ARCADE);
+    wall1.body.setSize(175, 200);
+    wall1.body.immovable = true;
 
 
     cursors = game.input.keyboard.createCursorKeys();
-    
+    wall1.body.collideWorldBounds = true;
+
 
 
     // HEALTH STUFF WIP
@@ -154,13 +168,13 @@ function create() {
     health1 = [];
     for(var h = 0; h < maxHealth; h++)
     {
-        var health = game.add.sprite(20 + (h * 30),20,'health');
+        var health = game.add.sprite(800 + (h * 30),20,'health');
         health1.push(health);
     }
     health2 = [];
     for(var k = 0; k < maxHealth; k++)
     {
-        var health = game.add.sprite(480 + (k * 30),20,'health');
+        var health = game.add.sprite(20 + (k * 30),20,'health');
         health2.push(health);
     }
 
@@ -170,7 +184,8 @@ function create() {
     
 
 function update() {
-
+	game.physics.arcade.collide(wall1, character1);
+	game.physics.arcade.collide(wall1, character2);
     if(health2.length > 0 && health1.length > 0)
     {
             
@@ -351,7 +366,11 @@ function fireBullet () {
             bullet.angle = angle;
             bullet.anchor.setTo(0.5, 0.5);
 
+            var fire = bullet.animations.add('fire');
+            
+            bullet.animations.play('fire', 10, true);
             bulletTime = game.time.time + 250;
+
         }
     }
     
@@ -371,6 +390,9 @@ function fireBullet2 () {
             bullet2.angle = angle2;
             bullet2.anchor.setTo(0.5, 0.5);
 
+            var fire2 = bullet2.animations.add('fire');
+
+            bullet2.animations.play('fire', 10, true);
             bulletTime2 = game.time.time + 250;
         }
     }
@@ -401,6 +423,10 @@ function hitC1 (hitbox1, bullet2) {
                 c2wins();
 //                tankWins.visible = true;
             }
+    
+    hitsound = game.add.audio('roblox');
+    hitsound.play();
+
 }
 
 function hitC2 (hitbox2, bullet) {
@@ -425,6 +451,8 @@ function hitC2 (hitbox2, bullet) {
                 character2.kill();
                 c1wins();
             }
+    hitsound = game.add.audio('roblox');
+    hitsound.play();
 }
 
 function c2wins(){
@@ -489,5 +517,12 @@ function c1wins(){
 function reset(){
     isGameOver = false;
     game.state.restart();
+
+}
+
+function render() {
+
+    game.debug.body(wall1);
+    game.debug.body(wall2);
 
 }

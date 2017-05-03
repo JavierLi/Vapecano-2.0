@@ -76,6 +76,8 @@ var screen;
 
 var isGameRepeat = false;
 
+var ins; 
+
 function setupCharacter(game, x, y) {
     var character = game.add.sprite(x, y, 'guy');
 
@@ -128,6 +130,7 @@ function preload() {
     
     game.load.image('start', 'assets/Start.png');
     game.load.spritesheet('bullet', 'assets/proj.png', 153, 153, 6)
+    game.load.image('ins', 'assets/ins.png');
 
 
 }
@@ -245,7 +248,12 @@ function create() {
     }
     
 if (!isGameRepeat){
+        ins = game.add.sprite((game.width/2), (game.height / 2), 'ins');
+
         screen = game.add.sprite(0, 0, 'start');
+		ins.scale.set(0.5);
+        ins.anchor.setTo(0.5, 0.5);
+
 
 }
 
@@ -470,6 +478,8 @@ function fireBullet () {
 
 
         }
+	    ins.alpha = 0;
+
     }
     
 }
@@ -496,6 +506,8 @@ function fireBullet2 () {
             bullet2.body.setSize(20, 20, 76, 56);
 
         }
+			    ins.alpha = 0;
+
     }
     
 }

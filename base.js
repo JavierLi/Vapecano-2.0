@@ -72,6 +72,8 @@ var music;
 
 var speed = 175;
 
+var screen;
+
 function setupCharacter(game, x, y) {
     var character = game.add.sprite(x, y, 'guy');
 
@@ -123,13 +125,15 @@ function preload() {
     
     game.load.audio('roblox', 'assets/roblox.mp3');
     game.load.audio('song', 'assets/song.mp3');
+    
+    game.load.image('start', 'assets/Start.png');
 
 
 }
 
 function create() {
 //    game.stage.backgroundColor ='#4dc3ff';
-    
+
     map = game.add.sprite(0, 0, 'map');
     map.scale.set(1.5);
     music = game.add.audio('song');
@@ -238,7 +242,8 @@ function create() {
         health2.push(health);
     }
 
-    
+    screen = game.add.sprite(0, 0, 'start');
+
 }   
 
     
@@ -258,6 +263,12 @@ function update() {
 	game.physics.arcade.collide(character2, outleft);
 	game.physics.arcade.collide(character2, outup);
 	game.physics.arcade.collide(character2, outdown);
+    
+    if (game.input.activePointer.isDown){
+    screen.alpha = 0;
+
+    }
+
     
     if(health2.length > 0 && health1.length > 0)
     {
@@ -601,7 +612,8 @@ function reset(){
     isGameOver = false;
     game.state.restart();
     music.restart();
-
+    music.volume = 0.18;
+    screen.alpha = 0;
 }
 
 

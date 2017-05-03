@@ -58,6 +58,19 @@ var hitsound;
 var wall1;
 var wall2;
 
+var wallb1;
+var wallb2;
+
+var box;
+
+var outleft;
+var outright;
+var outup;
+var outdown;
+
+var music;
+
+var speed = 175;
 
 function setupCharacter(game, x, y) {
     var character = game.add.sprite(x, y, 'guy');
@@ -109,6 +122,7 @@ function preload() {
     game.load.image('health','heart.png');
     
     game.load.audio('roblox', 'assets/roblox.mp3');
+    game.load.audio('song', 'assets/song.mp3');
 
 
 }
@@ -118,20 +132,23 @@ function create() {
     
     map = game.add.sprite(0, 0, 'map');
     map.scale.set(1.5);
-    
+    music = game.add.audio('song');
+    music.play();
+    music.volume = 0.18;
+
     // Create background and world bound.
-    game.world.setBounds(0, 0, 800, 672);
+    game.world.setBounds(0, 0, 900, 756);
     
     playerGroup = this.game.add.group();
 
-    character2 = setupCharacter(game, 200, 300);
-    character1 = setupCharacter(game, 600, 300);
+    character2 = setupCharacter(game, 105, 585);
+    character1 = setupCharacter(game, 795, 150);
     
     bullets = game.add.physicsGroup();
     bullets.createMultiple(5, 'bullet', false);
     bullets.setAll('checkWorldBounds', true);
     bullets.setAll('outOfBoundsKill', true);
-    
+
     bullets2 = game.add.physicsGroup();
     bullets2.createMultiple(5, 'bullet', false);
     bullets2.setAll('checkWorldBounds', true);
@@ -144,31 +161,69 @@ function create() {
     hitbox2.anchor.setTo(0.5, 0.5);
     game.physics.enable([hitbox1, hitbox2], Phaser.Physics.ARCADE);
     
-    fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-    fireButton2 = game.input.keyboard.addKey(Phaser.Keyboard.F);
+    fireButton = game.input.keyboard.addKey(Phaser.Keyboard.QUESTION_MARK);
+    fireButton2 = game.input.keyboard.addKey(Phaser.Keyboard.C);
     
     hitbox1.alpha = 0;
     hitbox2.alpha = 0;
     
 
-    // NEED LAKE WIP ELEVATION 
     wall1 = game.add.sprite(228, 220, 'hitbox1');
-    wall2 = game.add.sprite(498, 265.5, 'hitbox2');
-    game.physics.enable([wall1,wall2], Phaser.Physics.ARCADE);
-    wall1.body.setSize(175, 200);
+    wall2 = game.add.sprite(498, 220, 'hitbox1');
+    
+    game.physics.enable([wall1, wall2], Phaser.Physics.ARCADE);
+
+    wall1.body.setSize(175, 250);
     wall1.body.immovable = true;
 
-    wall1 = game.add.sprite(225, 262.5, 'hitbox1'); 
-    wall2 = game.add.sprite(493.5, 264, 'hitbox2'); 
-
-
-
-    cursors = game.input.keyboard.createCursorKeys();
+    wall2.body.setSize(175, 250);
+    wall2.body.immovable = true;
     wall1.body.collideWorldBounds = true;
+    wall2.body.collideWorldBounds = true;
+
+    wallb1 = game.add.sprite(228, 260.5, 'hitbox2');
+    wallb2 = game.add.sprite(498, 260.5, 'hitbox2');
+
+    game.physics.enable([wallb1, wallb2], Phaser.Physics.ARCADE);
+
+    wallb1.body.setSize(175, 250);
+    wallb1.body.immovable = true;
+
+    wallb2.body.setSize(175, 250);
+    wallb2.body.immovable = true;
+    
+    wall1.alpha = 0;
+    wall2.alpha = 0;
+        
+    wallb1.alpha = 0;
+    wallb2.alpha = 0;
+    cursors = game.input.keyboard.createCursorKeys();
 
 
+    outleft = game.add.sprite(0, 0, 'hitbox1');
+    outup = game.add.sprite(0, 0, 'hitbox1');
+    outdown = game.add.sprite(0, 640, 'hitbox1');
+    outright = game.add.sprite(900, 0, 'hitbox1');
 
-    // HEALTH STUFF WIP
+    game.physics.enable([outleft, outdown, outright, outup], Phaser.Physics.ARCADE);
+
+    outright.anchor.setTo(1, 0);
+    outdown.anchor.setTo(0, 1);
+    outright.body.setSize(40, 1000);
+    outdown.body.setSize(1000, 150);
+    outleft.body.setSize(40, 1000);
+    outup.body.setSize(1000, 60);
+
+    outright.body.immovable = true;
+    outleft.body.immovable = true;
+    outup.body.immovable = true;
+    outdown.body.immovable = true;
+
+    outright.alpha = 0;
+    outleft.alpha = 0;
+    outup.alpha = 0;
+    outdown.alpha = 0;
+
     
     health1 = [];
     for(var h = 0; h < maxHealth; h++)
@@ -191,6 +246,19 @@ function create() {
 function update() {
 	game.physics.arcade.collide(wall1, character1);
 	game.physics.arcade.collide(wall1, character2);
+	game.physics.arcade.collide(wall2, character1);
+	game.physics.arcade.collide(wall2, character2);
+    
+	game.physics.arcade.collide(character1, outright);
+	game.physics.arcade.collide(character1, outleft);
+	game.physics.arcade.collide(character1, outup);
+	game.physics.arcade.collide(character1, outdown);
+    
+	game.physics.arcade.collide(character2, outright);
+	game.physics.arcade.collide(character2, outleft);
+	game.physics.arcade.collide(character2, outup);
+	game.physics.arcade.collide(character2, outdown);
+    
     if(health2.length > 0 && health1.length > 0)
     {
             
@@ -202,7 +270,7 @@ function update() {
 	var nextIdle;
     if (cursors.left.isDown)
     {
-        character1.body.velocity.x = -100;
+        character1.body.velocity.x = -speed;
         character1.play('left');
         directionX = -bulletSpeed;
         directionY = 0;
@@ -212,7 +280,7 @@ function update() {
     }
     else if (cursors.right.isDown)
     {
-        character1.body.velocity.x = 100;
+        character1.body.velocity.x = speed;
         character1.play('right');
         directionX = bulletSpeed;
         directionY = 0;
@@ -233,7 +301,7 @@ function update() {
 	}
     if (cursors.up.isDown)
     {
-        character1.body.velocity.y = -100;
+        character1.body.velocity.y = -speed;
 		if (character1.body.velocity.x == 0)
         	character1.play('up');
         directionX = 0;
@@ -244,7 +312,7 @@ function update() {
     }
     else if (cursors.down.isDown)
     {
-        character1.body.velocity.y = 100;
+        character1.body.velocity.y = speed;
 		if (character1.body.velocity.x == 0)
         	character1.play('down');
         directionX = 0;
@@ -285,7 +353,7 @@ function update() {
 	var nextIdle;
     if (a.isDown)
     {
-        character2.body.velocity.x = -100;
+        character2.body.velocity.x = -speed;
         character2.play('left');
         directionX2 = -bulletSpeed;
         directionY2 = 0;
@@ -295,7 +363,7 @@ function update() {
     }
     else if (d.isDown)
     {
-        character2.body.velocity.x = 100;
+        character2.body.velocity.x = speed;
         character2.play('right');
         directionX2 = bulletSpeed;
         directionY2 = 0;
@@ -314,7 +382,7 @@ function update() {
 	}
     if (w.isDown)
     {
-        character2.body.velocity.y = -100;
+        character2.body.velocity.y = -speed;
 		if (character2.body.velocity.x == 0)
         	character2.play('up');
         directionX2 = 0;
@@ -325,7 +393,7 @@ function update() {
     }
     else if (s.isDown)
     {
-        character2.body.velocity.y = 100;
+        character2.body.velocity.y = speed;
 		if (character2.body.velocity.x == 0)
         	character2.play('down');
         directionX2 = 0;
@@ -345,12 +413,17 @@ function update() {
         }
             
     game.physics.arcade.overlap(bullets, hitbox2, hitC2, null, this);
-    game.physics.arcade.overlap(bullets2, hitbox1, hitC1, null, this);     hitbox1.body.position.y = character1.y - 31;
+    game.physics.arcade.overlap(bullets2, hitbox1, hitC1, null, this);  
+    hitbox1.body.position.y = character1.y - 31;
     hitbox2.body.position.y = character2.y - 31;
     hitbox1.body.position.x = character1.x - 19;
     hitbox2.body.position.x = character2.x - 19;
     
-    
+    game.physics.arcade.overlap(bullets, wallb1, b1hitw1, null, this);
+    game.physics.arcade.overlap(bullets2, wallb1, b2hitw1, null, this);  
+    game.physics.arcade.overlap(bullets, wallb2, b1hitw2, null, this);
+    game.physics.arcade.overlap(bullets2, wallb2, b2hitw2, null, this);  
+
     //change depth by y position, player sprite with greater y will be on the topper layer
     playerGroup.sort('y', Phaser.Group.SORT_ASCENDING);
 
@@ -375,6 +448,8 @@ function fireBullet () {
             
             bullet.animations.play('fire', 10, true);
             bulletTime = game.time.time + 250;
+            bullet.body.setSize(53, 5);
+
 
         }
     }
@@ -399,6 +474,8 @@ function fireBullet2 () {
 
             bullet2.animations.play('fire', 10, true);
             bulletTime2 = game.time.time + 250;
+            bullet2.body.setSize(53, 5);
+
         }
     }
     
@@ -429,8 +506,9 @@ function hitC1 (hitbox1, bullet2) {
 //                tankWins.visible = true;
             }
     
-    hitsound = game.add.audio('roblox');
-    hitsound.play();
+    hitsound = game.sound.play('roblox');
+
+//    hitsound.play();
 
 }
 
@@ -522,12 +600,37 @@ function c1wins(){
 function reset(){
     isGameOver = false;
     game.state.restart();
+    music.restart();
 
 }
 
-function render() {
 
-    game.debug.body(wall1);
-    game.debug.body(wall2);
+
+
+
+
+
+function b1hitw1 (wallb1, bullet){
+    bullet.kill();
+}
+
+
+function b2hitw1 (wallb1, bullet2){
+    bullet2.kill();
+}
+
+function b1hitw2 (wallb2, bullet){
+    bullet.kill();
+}
+
+function b2hitw2 (wallb2, bullet2){
+    bullet2.kill();
+}
+function render() {
+//
+//    game.debug.body(outdown);
+//    game.debug.body(outup);
+//    game.debug.body(outright);
+//    game.debug.body(outleft);
 
 }

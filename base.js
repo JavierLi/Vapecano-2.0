@@ -622,6 +622,7 @@ function reset(){
     game.state.restart();
     music.volume = 0.18;
     isGameOver = false;
+    isGameRepeat = true;
 }
 
 

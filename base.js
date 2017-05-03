@@ -74,6 +74,8 @@ var speed = 175;
 
 var screen;
 
+var isGameRepeat = false;
+
 function setupCharacter(game, x, y) {
     var character = game.add.sprite(x, y, 'guy');
 
@@ -111,12 +113,10 @@ function setupCharacter(game, x, y) {
 function preload() {
     game.load.spritesheet('guy', 'assets/zeldaspritesheet.png', guyWidth , guyHeight , guyNumFrames);
     game.load.image('background', 'assets/backg.png');
-//    game.load.image('bullet', 'assets/knife.png');
-    game.load.spritesheet('bullet', 'assets/arrow.png', 88.5, 41, 4)
+//    game.load.spritesheet('bullet', 'assets/arrow.png', 88.5, 41, 4)
     game.load.image('hitbox1', 'assets/hitbox1.png');
     game.load.image('hitbox2', 'assets/hitbox2.png');
     game.load.image('map', 'assets/FIGHT.png');
-//    game.load.image('tiles', 'assets/desert.png');
 
 
     
@@ -124,9 +124,10 @@ function preload() {
     game.load.image('health','heart.png');
     
     game.load.audio('roblox', 'assets/roblox.mp3');
-    game.load.audio('song', 'assets/song.mp3');
+    game.load.audio('song', 'assets/tokyo.mp3');
     
     game.load.image('start', 'assets/Start.png');
+    game.load.spritesheet('bullet', 'assets/proj.png', 153, 153, 6)
 
 
 }
@@ -137,7 +138,8 @@ function create() {
     map = game.add.sprite(0, 0, 'map');
     map.scale.set(1.5);
     music = game.add.audio('song');
-    music.play();
+    music.restart();
+//    music.play();
     music.volume = 0.18;
 
     // Create background and world bound.
@@ -241,8 +243,12 @@ function create() {
         var health = game.add.sprite(20 + (k * 30),20,'health');
         health2.push(health);
     }
+    
+if (!isGameRepeat){
+        screen = game.add.sprite(0, 0, 'start');
 
-    screen = game.add.sprite(0, 0, 'start');
+}
+
 
 }   
 
@@ -456,10 +462,11 @@ function fireBullet () {
             bullet.anchor.setTo(0.5, 0.5);
 
             var fire = bullet.animations.add('fire');
-            
-            bullet.animations.play('fire', 10, true);
+            bullet.scale.setTo(0.5, 0.5);
+
+            bullet.animations.play('fire', 10, false);
             bulletTime = game.time.time + 250;
-            bullet.body.setSize(53, 5);
+            bullet.body.setSize(20, 20, 76, 56);
 
 
         }
@@ -482,10 +489,11 @@ function fireBullet2 () {
             bullet2.anchor.setTo(0.5, 0.5);
 
             var fire2 = bullet2.animations.add('fire');
+            bullet2.scale.setTo(0.5, 0.5);
 
-            bullet2.animations.play('fire', 10, true);
+            bullet2.animations.play('fire', 10, false);
             bulletTime2 = game.time.time + 250;
-            bullet2.body.setSize(53, 5);
+            bullet2.body.setSize(20, 20, 76, 56);
 
         }
     }
@@ -563,7 +571,7 @@ function c2wins(){
     c2text.fill = '#43d637';
     isGameOver = true;
 
-      tryagaintext = game.add.text((game.width / 2), 400, "Click to try again", {
+      tryagaintext = game.add.text((game.width / 2), 400, "Click here to try again", {
         font: "40px Arial",
         fill: "#000000",
         align: "center"
@@ -575,7 +583,8 @@ function c2wins(){
         tryagaintext.fill = '#43d637';
 
      tryagaintext.events.onInputUp.add(function() {
-         reset();
+        music.destroy();
+        reset();
      });
 
 }
@@ -593,7 +602,7 @@ function c1wins(){
     c1text.fill = '#43d637';
     isGameOver = true;
 
-      tryagaintext = game.add.text((game.width / 2), 400, "Click to try again", {
+      tryagaintext = game.add.text((game.width / 2), 400, "Click here to try again", {
         font: "40px Arial",
         fill: "#000000",
         align: "center"
@@ -604,16 +613,15 @@ function c1wins(){
         tryagaintext.strokeThickness = 8;
         tryagaintext.fill = '#43d637';
      tryagaintext.events.onInputUp.add(function() {
-         reset();
+        music.destroy();
+        reset();
      });
 }
 
 function reset(){
-    isGameOver = false;
     game.state.restart();
-    music.restart();
     music.volume = 0.18;
-    screen.alpha = 0;
+    isGameOver = false;
 }
 
 

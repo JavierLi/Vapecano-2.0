@@ -128,7 +128,7 @@ function preload() {
     game.load.audio('roblox', 'assets/roblox.mp3');
     game.load.audio('song', 'assets/tokyo.mp3');
     
-    game.load.image('start', 'assets/Start.png');
+    game.load.image('start', 'assets/start.png');
     game.load.spritesheet('bullet', 'assets/proj.png', 153, 153, 6)
     game.load.image('ins', 'assets/ins.png');
 
@@ -247,7 +247,7 @@ function create() {
         health2.push(health);
     }
     
-// if (!isGameRepeat){
+if (!isGameRepeat){
         ins = game.add.sprite((game.width/2), (game.height / 2), 'ins');
 
         screen = game.add.sprite(0, 0, 'start');
@@ -255,7 +255,7 @@ function create() {
         ins.anchor.setTo(0.5, 0.5);
 
 
-// }
+}
 
 
 }   

@@ -247,7 +247,7 @@ function create() {
         health2.push(health);
     }
     
-if (!isGameRepeat){
+// if (!isGameRepeat){
         ins = game.add.sprite((game.width/2), (game.height / 2), 'ins');
 
         screen = game.add.sprite(0, 0, 'start');
@@ -255,7 +255,7 @@ if (!isGameRepeat){
         ins.anchor.setTo(0.5, 0.5);
 
 
-}
+// }
 
 
 }   

@@ -279,7 +279,7 @@ function update() {
 	game.physics.arcade.collide(character2, outdown);
     
     if (game.input.activePointer.isDown){
-    //screen.alpha = 0;
+    screen.alpha = 0;
 
     }
 
